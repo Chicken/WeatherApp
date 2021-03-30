@@ -16,10 +16,10 @@ function App() {
   function renderItem(item) {
     return (
       <Text style={styles.entry} key={item.key}>
-        {config.legend[item.key].label + ':  '}
+        {(config.legend[item.key]?.label ?? item.key) + ': '}
         <Text style={styles.value}>
           {item.val}
-          {config.legend[item.key].unit}
+          {config.legend[item.key]?.unit ?? ''}
         </Text>
       </Text>
     );

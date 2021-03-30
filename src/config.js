@@ -62,5 +62,9 @@ export default {
       label: 'Tuntuu kuin',
       unit: '°',
     },
+    rainIntensity: {
+      label: 'Sateen intensiteetti',
+      unit: '%',
+    },
   },
 };
