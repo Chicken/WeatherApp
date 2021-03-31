@@ -1,27 +1,27 @@
 {
-  "name": "reactiveweather",
-  "version": "0.0.1",
-  "author": "Antti <antti@antti.codes>",
-  "private": true,
-  "scripts": {
-    "android": "react-native run-android",
-    "start": "react-native start",
-    "lint": "eslint .",
-    "build": "cd android && gradlew assembleRelease && mv app/build/outputs/apk/release/app-release.apk ../weatherapp.apk"
-  },
-  "dependencies": {
-    "react": "16.13.1",
-    "react-native": "0.63.4"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.13.10",
-    "@babel/runtime": "^7.13.10",
-    "@react-native-community/eslint-config": "^2.0.0",
-    "eslint": "^7.21.0",
-    "metro-react-native-babel-preset": "^0.65.2",
-    "react-test-renderer": "16.13.1"
-  },
-  "jest": {
-    "preset": "react-native"
-  }
+    "name": "reactiveweather",
+    "version": "0.0.1",
+    "author": "Antti <antti@antti.codes>",
+    "private": true,
+    "scripts": {
+        "android": "react-native run-android",
+        "start": "react-native start",
+        "lint": "eslint --fix src index.js",
+        "format": "prettier --write --loglevel=warn src index.js",
+        "build": "cd android && gradlew assembleRelease && mv app/build/outputs/apk/release/app-release.apk ../weatherapp.apk"
+    },
+    "dependencies": {
+        "react": "16.13.1",
+        "react-native": "0.63.4"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.13.10",
+        "@babel/runtime": "^7.13.10",
+        "@react-native-community/eslint-config": "^2.0.0",
+        "eslint": "^7.21.0",
+        "eslint-config-prettier": "^8.1.0",
+        "eslint-plugin-prettier": "^3.3.1",
+        "metro-react-native-babel-preset": "^0.65.2",
+        "prettier": "^2.2.1"
+    }
 }
