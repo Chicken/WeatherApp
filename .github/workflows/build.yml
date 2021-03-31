@@ -1,0 +1,60 @@
+name: Continuous Deployment
+on:
+  push:
+    branches:
+      - master
+
+jobs: 
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    if: "! contains(toJSON(github.event.commits.*.message), '[SKIP-CD]')"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@master
+        with:
+          node-version: '14'
+
+      - name: Cache Dependencies
+        uses: c-hive/gha-yarn-cache@v1
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Cache Gradle Wrapper
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+
+      - name: Cache Gradle Dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+        restore-keys: ${{ runner.os }}-gradle-caches-
+
+      - name: Make Gradlew Executable
+        run: cd android && chmod +x ./gradlew
+
+      - name: Build App
+        run: cd android && gradlew assembleUnsigned --no-daemon
+
+      - name: Sign App
+        id: sign_app
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: android/app/build/outputs/apk/unsigned
+          signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
+          alias: weatherapp
+          keyStorePassword: android
+          keyPassword: android
+
+      - name: Upload App
+        uses: actions/upload-artifact@v2
+        with:
+          name: Signed Apk
+          path: ${{steps.sign_app.outputs.signedReleaseFile}}
