@@ -18,3 +18,6 @@ buck-out/
 
 # Build result
 weatherapp.apk
+
+# VScode
+.vscode

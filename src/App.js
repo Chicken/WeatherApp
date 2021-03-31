@@ -1,19 +1,32 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {ScrollView, StyleSheet, Text, StatusBar} from 'react-native';
 import config from './config.js';
 
-function App() {
-  let [weather, setWeather] = useState({});
-  async function updateWeather() {
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {};
+  }
+
+  async updateWeather() {
     try {
       let res = await fetch('https://weather.antti.codes/api/weather');
-      let data = await res.json();
-      setWeather(data);
+      this.setState(await res.json());
     } catch (e) {
       // ignore
     }
   }
-  function renderItem(item) {
+
+  componentDidMount() {
+    this.updateWeather();
+    this.updateInterval = setInterval(this.updateWeather, 10000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.updateInterval);
+  }
+
+  renderItem(item) {
     return (
       <Text style={styles.entry} key={item.key}>
         {(config.legend[item.key]?.label ?? item.key) + ': '}
@@ -24,21 +37,22 @@ function App() {
       </Text>
     );
   }
-  updateWeather();
-  setInterval(updateWeather, 10000);
-  return (
-    <>
-      <StatusBar barStyle="dark-light" />
-      <ScrollView style={styles.view}>
-        <Text style={styles.header}>Koti - Sää</Text>
-        {Object.entries(weather)
-          .map(([key, val]) => ({key, val}))
-          .filter((item) => !config.disabled.includes(item.key))
-          .map((item) => renderItem(item))}
-        <Text>{'\n\n\n'}</Text>
-      </ScrollView>
-    </>
-  );
+
+  render() {
+    return (
+      <>
+        <StatusBar barStyle="dark-light" />
+        <ScrollView style={styles.view}>
+          <Text style={styles.header}>Koti - Sää</Text>
+          {Object.entries(this.state)
+            .map(([key, val]) => ({key, val}))
+            .filter((item) => !config.disabled.includes(item.key))
+            .map((item) => this.renderItem(item))}
+          <Text>{'\n\n\n'}</Text>
+        </ScrollView>
+      </>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
