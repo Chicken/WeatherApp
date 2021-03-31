@@ -1,4 +1,4 @@
-package com.reactiveweather;
+package codes.antti.weather;
 
 import com.facebook.react.ReactActivity;
 

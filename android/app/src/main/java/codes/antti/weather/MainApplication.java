@@ -1,4 +1,4 @@
-package com.reactiveweather;
+package codes.antti.weather;
 
 import android.app.Application;
 import android.content.Context;
