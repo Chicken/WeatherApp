@@ -38,7 +38,7 @@ jobs:
         run: cd android && chmod +x ./gradlew
 
       - name: Build App
-        run: cd android && gradlew assembleUnsigned --no-daemon
+        run: cd android && ./gradlew assembleUnsigned --no-daemon
 
       - name: Sign App
         id: sign_app
