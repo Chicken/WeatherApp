@@ -50,8 +50,11 @@ jobs:
           keyStorePassword: android
           keyPassword: android
 
+      - name: Rename App
+        run: mv ${{ steps.sign_app.outputs.signedReleaseFile }} WeatherApp.apk
+
       - name: Upload App
         uses: actions/upload-artifact@v2
         with:
           name: Signed Apk
-          path: ${{ steps.sign_app.outputs.signedReleaseFile }}
+          path: WeatherApp.apk
