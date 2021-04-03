@@ -160,6 +160,7 @@ android {
         }
     }
     buildTypes {
+        // for github action where the apk is signed using external program
         unsigned {
             signingConfig null
         }
