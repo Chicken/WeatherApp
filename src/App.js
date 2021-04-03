@@ -1,23 +1,37 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, StatusBar } from "react-native";
-import config from "./config.js";
+import { FlatList, StyleSheet, Text, StatusBar } from "react-native";
+import Block from "./Block";
 
 class App extends React.Component {
-    constructor() {
-        super();
-        this.state = {};
-    }
+    state = {
+        meta: {
+            layout: [],
+            legend: {}
+        },
+        weather: {}
+    };
 
     async updateWeather() {
         try {
             let res = await fetch("https://weather.antti.codes/api/weather");
-            this.setState(await res.json());
+            this.setState({
+                meta: this.state.meta,
+                weather: await res.json()
+            });
         } catch (e) {
             // ignore
         }
     }
 
     componentDidMount() {
+        fetch("https://weather.antti.codes/api/mobile")
+            .then((res) => res.json())
+            .then((meta) => {
+                this.setState({
+                    meta,
+                    weather: this.state.weather
+                });
+            });
         this.updateWeather();
         this.updateInterval = setInterval(this.updateWeather, 10000);
     }
@@ -26,44 +40,35 @@ class App extends React.Component {
         clearInterval(this.updateInterval);
     }
 
-    renderItem(item) {
+    renderItem = ({ item: block }) => {
         return (
-            <Text style={styles.entry} key={item.key}>
-                {(config.legend[item.key]?.label ?? item.key) + ": "}
-                <Text style={styles.value}>
-                    {item.val}
-                    {config.legend[item.key]?.unit ?? ""}
-                </Text>
-            </Text>
+            <Block
+                rows={block}
+                legend={this.state.meta.legend}
+                weather={this.state.weather}
+            />
         );
-    }
+    };
 
     render() {
         return (
             <>
                 <StatusBar barStyle="dark-light" />
-                <ScrollView style={styles.view}>
-                    <Text style={styles.header}>Koti - Sää</Text>
-                    {Object.entries(this.state)
-                        .map(([key, val]) => ({ key, val }))
-                        .filter((item) => !config.disabled.includes(item.key))
-                        .map((item) => this.renderItem(item))}
-                    <Text>{"\n\n\n"}</Text>
-                </ScrollView>
+                <FlatList
+                    style={styles.view}
+                    ListHeaderComponent={
+                        <Text style={styles.header}>Koti - Sää</Text>
+                    }
+                    data={this.state.meta.layout}
+                    renderItem={this.renderItem}
+                    keyExtractor={(item) => item.join("")}
+                />
             </>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    value: {
-        color: "#eeeeee"
-    },
-    entry: {
-        marginBottom: 5,
-        color: "#cccccc",
-        fontSize: 20
-    },
     view: {
         backgroundColor: "#444444",
         height: "100%",
