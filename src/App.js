@@ -19,7 +19,7 @@ class App extends React.Component {
                 weather: await res.json()
             });
         } catch (e) {
-            // ignore
+            console.error(e);
         }
     }
 
@@ -33,7 +33,7 @@ class App extends React.Component {
                 });
             });
         this.updateWeather();
-        this.updateInterval = setInterval(this.updateWeather, 10000);
+        this.updateInterval = setInterval(this.updateWeather.bind(this), 10000);
     }
 
     componentWillUnmount() {
