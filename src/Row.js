@@ -1,19 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-class Row extends React.Component {
-    render() {
-        return (
-            <View style={styles.row}>
-                <Text style={styles.entry}>{this.props.label}</Text>
-                <Text style={styles.value}>
-                    {this.props.value} {this.props.unit}
-                </Text>
-            </View>
-        );
-    }
-}
-
 const styles = StyleSheet.create({
     row: {
         flexDirection: "row"
@@ -31,5 +18,14 @@ const styles = StyleSheet.create({
         fontSize: 20
     }
 });
+
+const Row = ({ value, unit, label }) => (
+    <View style={styles.row}>
+        <Text style={styles.entry}>{label}</Text>
+        <Text style={styles.value}>
+            {value} {unit}
+        </Text>
+    </View>
+);
 
 export default Row;
