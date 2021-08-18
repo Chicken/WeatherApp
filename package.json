@@ -11,8 +11,8 @@
         "build": "cd android && gradlew assembleRelease && mv app/build/outputs/apk/release/app-release.apk ../weatherapp.apk"
     },
     "dependencies": {
-        "react": "16.13.1",
-        "react-native": "0.63.4"
+        "react": "17.0.2",
+        "react-native": "0.65.0"
     },
     "devDependencies": {
         "@babel/core": "^7.14.8",
